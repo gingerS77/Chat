@@ -286,7 +286,7 @@ function toggleChatBoxGrowth(chatboxtitle) {
 }
 
 function checkChatBoxInputKey(event,chatboxtextarea,chatboxtitle) {
-	 
+	 console.log(chatboxtextarea);
 	if(event.keyCode == 13 && event.shiftKey == 0)  {
 		message = $(chatboxtextarea).val();
 		message = message.replace(/^\s+|\s+$/g,"");
@@ -297,7 +297,7 @@ function checkChatBoxInputKey(event,chatboxtextarea,chatboxtitle) {
 		if (message != '') {
 			//pushlish that user want help. p1:{to: chatboxtitle, message: message}, p2:callback
 		    userConfig.sendChatMessage(userConfig.private_channel_name,message, function(data){
-				message = message.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;");
+				//message = message.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;");
 				$("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);
 				//disable the chat box until support user is assigned 	
 				$("#chatbox_"+chatboxtitle+" .chatboxcontent").append('<div class="chatboxmessage"><span class="chatboxmessagecontent">'+message+'</span></div>');
@@ -335,6 +335,40 @@ function checkChatBoxInputKey(event,chatboxtextarea,chatboxtitle) {
 	}
 	 
 }
+
+function checkChatBoxInputKeyPushFyi(chatboxtextarea,chatboxtitle,message,support_user_id) {
+		$(".chatboxtextarea").removeAttr('disabled');
+		//message = message.replace(/^\s+|\s+$/g,"");
+		console.log(message);
+		$(chatboxtextarea).val('');
+		$(chatboxtextarea).focus();
+		$(chatboxtextarea).css('height','44px');
+		if (message != '') {
+			//pushlish that user want help. p1:{to: chatboxtitle, message: message}, p2:callback
+		    //message = message.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;");
+			$("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);
+			//disable the chat box until support user is assigned 	
+			$("#chatbox_"+chatboxtitle+" .chatboxcontent").append('<div class="chatboxmessage">'+support_user_id+':<span class="chatboxmessagecontent">'+message+'</span></div>');
+			$("#chatbox_"+chatboxtitle+" .chatboxcontent").scrollTop($("#chatbox_"+chatboxtitle+" .chatboxcontent")[0].scrollHeight);
+		}
+
+		chatHeartbeatTime = minChatHeartbeat;
+		chatHeartbeatCount = 1; 
+	var adjustedHeight = chatboxtextarea.clientHeight;
+	var maxHeight = 94;
+
+	if (maxHeight > adjustedHeight) {
+		adjustedHeight = Math.max(chatboxtextarea.scrollHeight, adjustedHeight);
+		if (maxHeight)
+			adjustedHeight = Math.min(maxHeight, adjustedHeight);
+		if (adjustedHeight > chatboxtextarea.clientHeight)
+			$(chatboxtextarea).css('height',adjustedHeight+8 +'px');
+	} else {
+		$(chatboxtextarea).css('overflow','auto');
+	}
+	 
+}
+
 
 function startChatSession(){  
 	$.ajax({
