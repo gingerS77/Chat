@@ -43,7 +43,7 @@
   var usersArray = [];
 
   var connUrl = document.getElementById('url').value;
-  var pushfyi = new Pushfyi("d82d024e-ba9e-414d-9078-2d806ca5d155","wss://sandbox.pushfyi.com", true);   // "ws://localhost:8080"
+  var pushfyi = new Pushfyi("d82d024e-ba9e-414d-9078-2d806ca5d155","ws://localhost:8080", false);
   pushfyi.init(); 
   pushfyi.on("disconnected", function(data) {
       console.log(data);
@@ -76,7 +76,7 @@
       }  
     }
     else{
-      str+= "<li>"+usersArray+"</li>";
+      str+ = "<li>"+usersArray+"</li>";
     }
     users_list.innerHTML = str;
   }
@@ -92,7 +92,7 @@ pushfyi.subscribe('pushfyi_userlist',function(event){
     show_users(userId);
     if (checkCookie('userId')) {
         this_uid = getCookie('userId');
-        pushfyi.publish('pushfyi_update_userlist',{userName:this_uid}); 
+        pushfyi.publish('pushfyi_update_userlist',userName:this_uid); 
     }
 
 });
